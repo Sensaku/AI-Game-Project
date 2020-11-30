@@ -29,21 +29,25 @@ class Position:
             exit(-1)
 
         if bot:
-            seeds = self.cells_computer[indice]
-            self.cells_computer[indice] = 0
+            seeds = self.cells_computer[-(indice + 1)]
+            self.cells_computer[-(indice + 1)] = 0
         else:
             seeds = self.cells_player[indice]
             self.cells_player[indice] = 0
-        i = indice + 1
+
+        if bot:
+            i = indice + 12 + 1
+        else:
+            i = indice + 1
+
         while seeds != 0:
             if i < 12 or i > 24:
                 self.cells_player[i] += 1
                 seeds -= 1
             else:
-                self.cells_computer[- (i - 12)] += 1
+                self.cells_computer[- (i - 11)] += 1
                 seeds -= 1
-            i += 1
-
+            i = (i + 1) % 24
 
     def __repr__(self):
         return f"Etat plateau joueur: {self.cells_player}\nEtat plateau CPU: {self.cells_computer}\n"
@@ -52,7 +56,7 @@ class Position:
 game = Position(12)
 while sum(game.cells_player) + sum(game.cells_computer) > 8:
     take = int(input("Quel case?\n"))
-    if not(game.computer_play):
+    if not game.computer_play:
         game.play_move(game.computer_play, take)
         game.computer_play = True
     else:
