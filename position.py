@@ -36,18 +36,54 @@ class Position:
             self.cells_player[indice] = 0
 
         if bot:
-            i = indice + 12 + 1
+            i = indice + 11 + 1
         else:
             i = indice + 1
 
         while seeds != 0:
-            if i < 12 or i > 24:
+            if i < 12:
                 self.cells_player[i] += 1
                 seeds -= 1
             else:
                 self.cells_computer[- (i - 11)] += 1
                 seeds -= 1
-            i = (i + 1) % 24
+            i = (i + 1) % 23
+
+        while True:
+            if bot:
+                if i > 11:
+                    current_seed = self.cells_computer[- (i - 11)]
+                    if 1 < current_seed < 4:
+                        self.seeds_computer += current_seed
+                        self.cells_computer[- (i - 11)] = 0
+                    else:
+                        break
+                else:
+                    current_seed = self.cells_player[i]
+                    if 1 < current_seed < 4:
+                        self.computer_play += current_seed
+                        self.cells_player[i] = 0
+                    else:
+                        break
+            else:
+                if i > 11:
+                    current_seed = self.cells_computer[- (i - 11)]
+                    if 1 < current_seed < 4:
+                        self.seeds_player += current_seed
+                        self.cells_computer[- (i - 11)] = 0
+                    else:
+                        break
+                else:
+                    current_seed = self.cells_player[i]
+                    if 1 < current_seed < 4:
+                        self.seeds_player += current_seed
+                        self.cells_player[i] = 0
+                    else:
+                        break
+            if i < 0:
+                i = 23
+            else:
+                i -= 1
 
     def __repr__(self):
         return f"Etat plateau joueur: {self.cells_player}\nEtat plateau CPU: {self.cells_computer}\n"
@@ -57,7 +93,7 @@ game = Position(12, False)
 
 while sum(game.cells_player) + sum(game.cells_computer) > 8:
 
-    take = int(input("Quel case?\n"))
+    take = int(input(f"{'Bot turn : ' if game.computer_play else ''}Quel case?\n"))
 
     if not game.computer_play:
         game.play_move(game.computer_play, take)
