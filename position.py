@@ -1,9 +1,9 @@
 class Position:
 
-    def __init__(self, seeds_value):
+    def __init__(self, seeds_value, bot_statu):
         self.cells_player = [4 for i in range(seeds_value)]
         self.cells_computer = [4 for i in range(seeds_value)]
-        self.computer_play = False
+        self.computer_play = bot_statu
         self.seeds_player = seeds_value
         self.seeds_computer = seeds_value
 
@@ -53,12 +53,16 @@ class Position:
         return f"Etat plateau joueur: {self.cells_player}\nEtat plateau CPU: {self.cells_computer}\n"
 
 
-game = Position(12)
+game = Position(12, False)
+
 while sum(game.cells_player) + sum(game.cells_computer) > 8:
+
     take = int(input("Quel case?\n"))
+
     if not game.computer_play:
         game.play_move(game.computer_play, take)
         game.computer_play = True
+
     else:
         game.play_move(game.computer_play, take)
         game.computer_play = False
