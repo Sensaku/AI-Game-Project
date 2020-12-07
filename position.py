@@ -36,12 +36,19 @@ class Position:
             self.cells_player[indice] = 0
 
         if bot:
-            i = indice + 12 + 1
+            taken_cell = indice + 12
+            i = indice + 12
         else:
-            i = indice + 1
+            i = indice
+            taken_cell = indice
 
         while seeds != 0:
-            if i >= 24:
+            if i == taken_cell:
+                i += 1
+            else:
+                i += 1
+
+            if i > 23:
                 i = 0
 
             if i < 12:
@@ -50,41 +57,31 @@ class Position:
             else:
                 self.cells_computer[i - 12] += 1
                 seeds -= 1
-            i += 1
 
         while True:
-            if bot:
-                if i > 11:
-                    current_seed = self.cells_computer[- (i - 11)]
-                    if 1 < current_seed < 4:
-                        self.seeds_computer += current_seed
-                        self.cells_computer[- (i - 11)] = 0
-                    else:
-                        break
+            if i >= 12:
+                if bot and 1 < self.cells_computer[i - 12] < 4:
+                    self.seeds_computer += self.cells_computer[i - 12]
+                    self.cells_computer[i - 12] = 0
+                elif not bot and 1 < self.cells_computer[i - 12] < 4:
+                    self.seeds_player += self.cells_computer[i - 12]
+                    self.cells_computer[i - 12] = 0
                 else:
-                    current_seed = self.cells_player[i]
-                    if 1 < current_seed < 4:
-                        self.computer_play += current_seed
-                        self.cells_player[i] = 0
-                    else:
-                        break
+                    break
+
             else:
-                if i > 11:
-                    current_seed = self.cells_computer[- (i - 11)]
-                    if 1 < current_seed < 4:
-                        self.seeds_player += current_seed
-                        self.cells_computer[- (i - 11)] = 0
-                    else:
-                        break
+                if 1 < self.cells_player[i] < 4 and not bot:
+                    self.seeds_player += self.cells_player[i]
+                    self.cells_player[i] = 0
+
+                elif 1 < self.cells_player[i] < 4 and bot:
+                    self.seeds_computer += self.cells_player[i]
+                    self.cells_player[i] = 0
                 else:
-                    current_seed = self.cells_player[i]
-                    if 1 < current_seed < 4:
-                        self.seeds_player += current_seed
-                        self.cells_player[i] = 0
-                    else:
-                        break
-            if i < 0:
-                i = 23
+                    break
+
+            if i <= 0:
+                i = 24
             else:
                 i -= 1
 
