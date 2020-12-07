@@ -29,25 +29,28 @@ class Position:
             exit(-1)
 
         if bot:
-            seeds = self.cells_computer[-(indice + 1)]
-            self.cells_computer[-(indice + 1)] = 0
+            seeds = self.cells_computer[indice]
+            self.cells_computer[indice] = 0
         else:
             seeds = self.cells_player[indice]
             self.cells_player[indice] = 0
 
         if bot:
-            i = indice + 11 + 1
+            i = indice + 12 + 1
         else:
             i = indice + 1
 
         while seeds != 0:
+            if i >= 24:
+                i = 0
+
             if i < 12:
                 self.cells_player[i] += 1
                 seeds -= 1
             else:
-                self.cells_computer[- (i - 11)] += 1
+                self.cells_computer[i - 12] += 1
                 seeds -= 1
-            i = (i + 1) % 23
+            i += 1
 
         while True:
             if bot:
@@ -86,7 +89,7 @@ class Position:
                 i -= 1
 
     def __repr__(self):
-        return f"Etat plateau joueur: {self.cells_player}\nEtat plateau CPU: {self.cells_computer}\n"
+        return f"Etat plateau joueur: {self.cells_player}\nEtat plateau CPU: {self.cells_computer[len(self.cells_computer)::-1]}\n"
 
 
 game = Position(12, False)
