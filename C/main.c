@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-const int seed_value = 12;
+static int seed_value = 12;
 
 struct Position{
     int cells_player[12];
@@ -9,21 +9,6 @@ struct Position{
     int seeds_player; 
     int seeds_computer;
 };
-
-
-
-
-struct Position initPosition(int bot_status){
-    struct Position game;
-    for(int i = 0;i<seed_value;i++){
-        game.cells_computer[i] = 4;
-        game.cells_player[i] = 4;
-    }
-    game.computer_play = bot_status;
-    game.seeds_player = seed_value;
-    game.seeds_computer = seed_value;
-    return game;
-}
 
 void displayPosition(struct Position position){
     printf("cells_player   = ");
@@ -39,9 +24,52 @@ void displayPosition(struct Position position){
     printf("seeds_player   = %d \n",position.seeds_player);
     printf("seeds_computer = %d \n",position.seeds_computer);
 }
+/*
+void illegal_move(bot,indice){
+
+}
+*/
+
+
+
+
+struct Position initPosition(int bot_status){
+    struct Position position;
+    for(int i = 0;i<seed_value;i++){
+        position.cells_computer[i] = 4;
+        position.cells_player[i] = 4;
+    }
+    position.computer_play = bot_status;
+    position.seeds_player = seed_value;
+    position.seeds_computer = seed_value;
+    return position;
+}
+
+int sumgame(struct Position position){
+    int sum = 0;
+    for (int i = 0; i < seed_value; i++){
+        sum += position.cells_player[i] + position.cells_computer[i];
+    }
+    if(sum > 8){
+        return 0;
+    }else{
+        return 1;
+    }
+}
 
 int main(void) {
     struct Position position = initPosition(1);
     displayPosition(position);
+
+    while(sumgame(position)==0){
+        int input;
+        if(position.computer_play == 0){
+
+        }else{
+            printf("Quel case pour le joueur ?");
+            scanf("%d",&input);
+        }
+    }
+
     return 0;
 }
